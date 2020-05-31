@@ -20,6 +20,6 @@ const firebaseConfig = {
 var init = firebase.initializeApp(firebaseConfig);
 
 
-firebase.firestore().collection('test').add({test:'aaa'})
-.then(r=>alert(r))
-.catch(e=>alert(e))
+// firebase.firestore().collection('test1').add({test:'aaa'})
+// .then(r=>alert("success"))
+// .catch(e=>alert("fail"))

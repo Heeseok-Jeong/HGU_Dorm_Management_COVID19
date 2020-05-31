@@ -2,13 +2,11 @@
 <html lang="en">
 
 <head>
-
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
   <title>HGU Dorm Overnight Stay Management - COVID19</title>
+
+
 
   <!-- fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital@0;1&display=swap" rel="stylesheet">
@@ -32,23 +30,24 @@
       font-family: 'Open Sans', sans-serif;
     }
   </style>
-
 </head>
 
 <body>
   <!-- Navigation -->
   <nav class="navbar fixed-top navbar-expand-lg fixed-top" style="background-color: rgb(245,240,245); height: 4.5rem;">
     <div class="container">
-      <a class="navbar-brand" href="new_index.html"><strong>HGU Dorm Overnight Management - COVID19</strong></a>
-      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-        data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-        aria-label="Toggle navigation">
+      <a class="navbar-brand" href="index.html"><strong>HGU Dorm Overnight Management - COVID19</strong></a>
+      <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+        aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
             <a class="nav-link" href="#SignInModal" data-toggle="modal" data-target="#SignInModal">SignIn</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#LogOutModal" data-toggle="modal" data-target="#LogOutModal">LogOut</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="mypage.html">MyPage</a>
@@ -73,18 +72,16 @@
           <li>
             <p>Apply for an overnight stay</p>
           </li>
-          <button onclick="javascript:alert('Sign in please')" type="button" class="btn btn-default"
-            style="margin-left:0.8rem" href="apply.html"><img src="img/apply.jpg" width="95rem" height="95rem"> <span
-              class="glyphicon glyphicon-share-alt"></span></button>
+          <button onclick="javascript:alert('Sign in please')" type="button" class="btn btn-default" style="margin-left:0.8rem"  href="apply.html"><img
+              src="img/apply.jpg" width="95rem" height="95rem"> <span class="glyphicon glyphicon-share-alt"></span></button>
         </ul>
         <br><br>
         <ul>
           <li>
             <p>Register for your location</p>
           </li>
-          <button onclick="javascript:alert('Sign in please')" type="button" class="btn btn-default"><img
-              src="img/location.png" width="90rem" height="90rem"> <span
-              class="glyphicon glyphicon-share-alt"></span></button>
+          <button onclick="javascript:alert('Sign in please')" type="button" class="btn btn-default"><img src="img/location.png"
+              width="90rem" height="90rem"> <span class="glyphicon glyphicon-share-alt"></span></button>
         </ul>
       </ul>
     </div>
@@ -140,6 +137,39 @@
   </div>
   <!-- /.container -->
 
+  <!-- The Modal -->
+  <div class="modal" id="LogOutModal" name="LogOutModal">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+      <div class="modal-content" style="margin-top: 5rem">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <!-- <div class="row">
+                  <h1 class="modal-title ">BMI 검사   </h1>
+                  
+              </div> -->
+          <h1 class="modal-title ">Log out <button type="button" class="close" data-dismiss="modal" style="height: 5rem; margin-left: 18rem; position: fixed;">x</button></h1>
+
+
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+
+          <a class="text-left" style="color: gray; font-size: 1.3rem">
+            Are you sure to log out?
+          </a>
+
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer text-center">
+          <button type="button" onclick="location.href='index.html'" class="btn btn-primary" data-dismiss="modal">Sure</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- The Modal -->
   <div class="modal" id="SignInModal" name="SignInModal">
@@ -179,6 +209,8 @@
     </div>
   </div>
 
+  <!-- <button type="button" style="width:10rem; height: 3rem;" onclick="registerLoc()" class="btn btn-secondary text-center">Register</button> -->
+
   <!-- Footer -->
   <footer class="py-5 bg-dark">
     <div class="container">
@@ -188,13 +220,12 @@
     <!-- /.container -->
   </footer>
 
+
   <script>
     $(document).ready(function () {
       refreshPage();
     });
-
     function refreshPage() {
-
       $.ajax({
         url: "https://atec114.pohang.go.kr/COVID-19/covid-19.php",
         type: 'POST',
@@ -285,9 +316,12 @@
 
   </script>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    function imageButton() {
+      alert('Sign in please.');
+    } 
+  </script>
 
   <script src="./dist/main.js"></script>
 
