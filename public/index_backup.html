@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
   <title>HGU Dorm Overnight Stay Management - COVID19</title>
-
-
 
   <!-- fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital@0;1&display=swap" rel="stylesheet">
@@ -20,16 +22,17 @@
   <!-- Custom styles for this template -->
   <link href="css/modern-business.css" rel="stylesheet">
 
-  <style media="screen">
+  <style>
     p.case {
-      font-size: 1.3rem;
-      color: rgb(90, 90, 90)
-    }
-
+        font-size: 1.3rem;
+        color: rgb(90, 90, 90)
+      }
+  
     body {
-      font-family: 'Open Sans', sans-serif;
-    }
+        font-family: 'Open Sans', sans-serif;
+      }
   </style>
+
 </head>
 
 <body>
@@ -183,6 +186,123 @@
     <!-- /.container -->
   </footer>
 
+  <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-app.js">
+    alert('check');
+  </script> -->
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js">
+    alert('check');
+  </script>
+
+  <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-analytics.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-auth.js"></script> -->
+  <!-- <script src="https://www.gstatic.com/firebasejs/7.14.5/firebase-firestore.js"></script> -->
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyCyNr4pksBCWW29YabfUgQTLakG766HULY",
+      authDomain: "software-engineering-277504.firebaseapp.com",
+      databaseURL: "https://software-engineering-277504.firebaseio.com",
+      projectId: "software-engineering-277504",
+      storageBucket: "software-engineering-277504.appspot.com",
+      messagingSenderId: "157030108599",
+      appId: "1:157030108599:web:2bc5b29db54ffdd624ec32",
+      measurementId: "G-WFLGWYHHS6"
+    };
+    const firebase = require("firebase");
+    alert(111);
+    // Required for side-effects
+    require("firebase/firestore");
+
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+
+    // const firebase = require("firebase");
+    // // Required for side-effects
+    // require("firebase/firestore");
+    // Get a reference to the database service
+    var db = firebase.firestore();
+
+    var studentID = 21400707;
+    var date = 200519;
+    var time = 0116;
+    // var location = lat + ", " + lon
+    var loc = "31.12, 123.34"
+
+    var studentsCollectionRef = db.collection('students');
+    var overnightCollectionRef = db.collection('students').doc(studentID).collection('overnight');
+    var locationCollectionRef = db.collection('students').doc(studentID).collection('overnight').doc(date).collection('location');
+
+    function registerLoc() {
+      var docRef = db.collection("students").doc("21400707");
+
+      alert(3);
+      docRef.get().then(function (doc) {
+        alert(123);
+        if (doc.exists) {
+          alert(doc.data());
+          console.log("Document data:", doc.data());
+        } else {
+          alert("no");
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      });
+
+      studentsCollectionRef.doc(studentID).get().then(function (doc) {
+        alert(2);
+        if (doc.exists) {
+          alert(3)
+          console.log("Document data:", doc.data());
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+      }).catch(function (error) {
+        console.log("Error getting document:", error);
+      });
+      // Add a new document in collection "cities"
+
+      // studentsCollectionRef.doc("21400012").set({
+      //   RC: "Bethel",
+      //   name: "SM Kim",
+      //   phone_number: "01012341234b"
+      // })
+      //   .then(function () {
+      //     alert("O");
+      //     console.log("Document successfully written!");
+      //   })
+      //   .catch(function (error) {
+      //     alert("x");
+      //     console.error("Error writing document: ", error);
+      //   });
+
+      // locationCollectionRef.doc(time).set({
+      //   caution: false,
+      //   geo: loc
+      // })
+      //   .then(function () {
+      //     alert("O");
+      //     console.log("Document successfully written!");
+      //   })
+      //   .catch(function (error) {
+      //     alert("x");
+      //     console.error("Error writing document: ", error);
+      //   });
+      alert("hi");
+    }
+    alert("5");
+
+  </script>
+
 
   <script>
     $(document).ready(function () {
@@ -286,8 +406,13 @@
     } 
   </script>
 
-  <script src="./dist/main.js"></script>
 
+
+
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

@@ -66,10 +66,10 @@
   <div id="map" style="width:50%;height:30rem;margin: 0 auto"></div>
   <br>
   <div style="width: 10%; margin: auto;">
-      <!-- <a class="btn btn-lg btn-secondary btn-block text-center" style="width:10rem; margin: 0 auto;" href="#">Register</a> -->
-      <button type="button" style="width:10rem; height: 3rem;" onclick="window.open('https://hisnet.handong.edu/')" class="btn btn-secondary text-center">Register</button>
+    <!-- <a class="btn btn-lg btn-secondary btn-block text-center" style="width:10rem; margin: 0 auto;" href="#">Register</a> -->
+    <button type="button" style="width:10rem; height: 3rem;" onclick="registerLoc()" class="btn btn-secondary text-center">Register</button>
   </div>
-  
+
 
   <!-- The Modal -->
   <div class="modal" id="LogOutModal" name="LogOutModal">
@@ -114,13 +114,16 @@
     </footer>
 
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=1f2ea91b9172e8c0e3e0c7eca09ad534"></script>
-    
+
     <script>
       var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
         mapOption = {
           center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
           level: 4 // 지도의 확대 레벨 
         };
+
+      var lat = 0;
+      var lon = 0;
 
       var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
 
@@ -130,7 +133,7 @@
         // GeoLocation을 이용해서 접속 위치를 얻어옵니다
         navigator.geolocation.getCurrentPosition(function (position) {
 
-          var lat = position.coords.latitude, // 위도
+          lat = position.coords.latitude, // 위도
             lon = position.coords.longitude; // 경도
 
           var locPosition = new kakao.maps.LatLng(lat, lon), // 마커가 표시될 위치를 geolocation으로 얻어온 좌표로 생성합니다
@@ -175,9 +178,109 @@
       }    
     </script>
 
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/7.14.4/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="/__/firebase/7.14.4/firebase-analytics.js"></script>
+    <script src="/__/firebase/7.14.4/firebase-firestore.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+
+    <script>
+      const firebase = require("firebase");
+      // Required for side-effects
+      require("firebase/firestore");
+      // Get a reference to the database service
+      var db = firebase.firestore();
+
+      var studentID = 21400707;
+      var date = 200519;
+      var time = 0116;
+      // var location = lat + ", " + lon
+      var loc = "31.12, 123.34"
+
+      var studentsCollectionRef = db.collection('students');
+      var overnightCollectionRef = db.collection('students').doc(studentID).collection('overnight');
+      var locationCollectionRef = db.collection('students').doc(studentID).collection('overnight').doc(date).collection('location');
+
+      function registerLoc() {
+        db.collection("students").add({
+          first: "Ada",
+          last: "Lovelace",
+          born: 1815
+        })
+          .then(function (docRef) {
+            console.log("Document written with ID: ", docRef.id);
+          })
+          .catch(function (error) {
+            console.error("Error adding document: ", error);
+          });
+
+        studentsCollectionRef.doc(studentID).get().then(function (doc) {
+          alert(2);
+          if (doc.exists) {
+            alert(3)
+            console.log("Document data:", doc.data());
+          } else {
+            // doc.data() will be undefined in this case
+            console.log("No such document!");
+          }
+        }).catch(function (error) {
+          console.log("Error getting document:", error);
+        });
+        // Add a new document in collection "cities"
+
+        // studentsCollectionRef.doc("21400012").set({
+        //   RC: "Bethel",
+        //   name: "SM Kim",
+        //   phone_number: "01012341234b"
+        // })
+        //   .then(function () {
+        //     alert("O");
+        //     console.log("Document successfully written!");
+        //   })
+        //   .catch(function (error) {
+        //     alert("x");
+        //     console.error("Error writing document: ", error);
+        //   });
+
+        // locationCollectionRef.doc(time).set({
+        //   caution: false,
+        //   geo: loc
+        // })
+        //   .then(function () {
+        //     alert("O");
+        //     console.log("Document successfully written!");
+        //   })
+        //   .catch(function (error) {
+        //     alert("x");
+        //     console.error("Error writing document: ", error);
+        //   });
+        alert("hi");
+      }
+      alert("5");
+
+    </script>
+
     <!-- Bootstrap core JavaScript -->
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <!-- <script src="/__/firebase/6.2.0/firebase-app.js"></!--> -->
+
+    <!-- <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.2.3/firebase-firestore.js"></script> -->
+
+    <!-- Add Firebase products that you want to use -->
+    <!-- <script src="/__/firebase/6.2.0/firebase-auth.js"></script> -->
+    <!-- <script src="/__/firebase/6.2.0/firebase-firestore.js"></!--> -->
+
 
 </body>
 
