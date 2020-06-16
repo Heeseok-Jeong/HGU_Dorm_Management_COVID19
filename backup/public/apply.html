@@ -1,0 +1,782 @@
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+    <!-- jquery CDN -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <!-- jquery UI CDN -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <!-- 언어 별 CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.9.2/i18n/jquery.ui.datepicker-ko.min.js"></script>
+    <!-- Date 라이브러리 -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
+
+    <!--calendar-->
+    <link href='./style/fullcalendar.min.css' rel='stylesheet' />
+    <link href='./style/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+    <link href='./style/popup.css' rel='stylesheet' />
+    <link href='./style/form-popup.css' rel='stylesheet' />
+    <link href='./style/mini-calendar.css' rel='stylesheet' />
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.2/handlebars.min.js"></script>
+    <script src='./js/lib/jquery.min.js'></script>
+    <!-- Latest compiled and minified CSS -->
+    <link href='./style/bootstrap.min.css' rel='stylesheet'>
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!--calendar-->
+    <script type="text/javascript" src="./js/init.js"></script>
+    <script type="text/javascript" src="./js/lib/util.js"></script>
+    <script type="text/javascript" src="./js/view/schedule/schedule-display.js"></script>
+    <script type="text/javascript" src="./js/view/calendar/calendar.js"></script>
+    <script type="text/javascript" src="./js/view/calendar/button.js"></script>
+    <script type="text/javascript" src="./js/view/calendar/mini-calendar.js"></script>
+    <!--calendar-->
+
+    <script type="text/javascript">
+    $(document).ready(function() {
+      $('#contact_form').bootstrapValidator({
+          // To use feedback icons, ensure that you use Bootstrap v3.1.0 or later
+          feedbackIcons: {
+              valid: 'glyphicon glyphicon-ok',
+              invalid: 'glyphicon glyphicon-remove',
+              validating: 'glyphicon glyphicon-refresh'
+          },
+          fields: {
+              first_name: {
+                  validators: {
+                          stringLength: {
+                          min: 2,
+                      },
+                          notEmpty: {
+                          message: 'Please enter your First Name'
+                      }
+                  }
+              },
+               last_name: {
+                  validators: {
+                       stringLength: {
+                          min: 2,
+                      },
+                      notEmpty: {
+                          message: 'Please enter your Last Name'
+                      }
+                  }
+              },
+         user_name: {
+                  validators: {
+                       stringLength: {
+                          min: 8,
+                      },
+                      notEmpty: {
+                          message: 'Please enter your Username'
+                      }
+                  }
+              },
+         user_password: {
+                  validators: {
+                       stringLength: {
+                          min: 8,
+                      },
+                      notEmpty: {
+                          message: 'Please enter your Password'
+                      }
+                  }
+              },
+        confirm_password: {
+                  validators: {
+                       stringLength: {
+                          min: 8,
+                      },
+                      notEmpty: {
+                          message: 'Please confirm your Password'
+                      }
+                  }
+              },
+              email: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Please enter your Email Address'
+                      },
+                      emailAddress: {
+                          message: 'Please enter a valid Email Address'
+                      }
+                  }
+              },
+              contact_no: {
+                  validators: {
+                    stringLength: {
+                          min: 12,
+                          max: 12,
+                      notEmpty: {
+                          message: 'Please enter your Contact No.'
+                       }
+                  }
+              },
+         department: {
+                  validators: {
+                      notEmpty: {
+                          message: 'Please select your Department/Office'
+                      }
+                  }
+              },
+                  }
+              }
+          })
+          .on('success.form.bv', function(e) {
+              $('#success_message').slideDown({ opacity: "show" }, "slow") // Do something ...
+                  $('#contact_form').data('bootstrapValidator').resetForm();
+
+              // Prevent form submission
+              e.preventDefault();
+
+              // Get the form instance
+              var $form = $(e.target);
+
+              // Get the BootstrapValidator instance
+              var bv = $form.data('bootstrapValidator');
+
+              // Use Ajax to submit form data
+              $.post($form.attr('action'), $form.serialize(), function(result) {
+                  console.log(result);
+              }, 'json');
+          });
+      });
+
+      $(function() {
+              //모든 datepicker에 대한 공통 옵션 설정
+              $.datepicker.setDefaults({
+                  dateFormat: 'yy-mm-dd' //Input Display Format 변경
+                  ,showOtherMonths: true //빈 공간에 현재월의 앞뒤월의 날짜를 표시
+                  ,showMonthAfterYear:true //년도 먼저 나오고, 뒤에 월 표시
+                  ,changeYear: true //콤보박스에서 년 선택 가능
+                  ,changeMonth: true //콤보박스에서 월 선택 가능
+                  ,showOn: "both" //button:버튼을 표시하고,버튼을 눌러야만 달력 표시 ^ both:버튼을 표시하고,버튼을 누르거나 input을 클릭하면 달력 표시
+                  ,buttonImage: "http://jqueryui.com/resources/demos/datepicker/images/calendar.gif" //버튼 이미지 경로
+                  ,buttonImageOnly: true //기본 버튼의 회색 부분을 없애고, 이미지만 보이게 함
+                  ,buttonText: "선택" //버튼에 마우스 갖다 댔을 때 표시되는 텍스트
+                  ,yearSuffix: "년" //달력의 년도 부분 뒤에 붙는 텍스트
+                  ,monthNamesShort: ['1','2','3','4','5','6','7','8','9','10','11','12'] //달력의 월 부분 텍스트
+                  ,monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'] //달력의 월 부분 Tooltip 텍스트
+                  ,dayNamesMin: ['일','월','화','수','목','금','토'] //달력의 요일 부분 텍스트
+                  ,dayNames: ['일요일','월요일','화요일','수요일','목요일','금요일','토요일'] //달력의 요일 부분 Tooltip 텍스트
+                  ,minDate: "-1M" //최소 선택일자(-1D:하루전, -1M:한달전, -1Y:일년전)
+                  ,maxDate: "+1M" //최대 선택일자(+1D:하루후, -1M:한달후, -1Y:일년후)
+              });
+
+              //input을 datepicker로 선언
+              $("#datepicker").datepicker();
+              $("#datepicker2").datepicker();
+
+              //From의 초기값을 오늘 날짜로 설정
+              $('#datepicker').datepicker('setDate', 'today'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+              //To의 초기값을 내일로 설정
+              $('#datepicker2').datepicker('setDate', '+1D'); //(-1D:하루전, -1M:한달전, -1Y:일년전), (+1D:하루후, -1M:한달후, -1Y:일년후)
+          });
+
+          
+
+    </script>
+    <style media="screen">
+    @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
+      *{
+        box-sizing: border-box;
+      }
+      body{
+        margin-left:10px;
+        height:auto;
+      }
+      .box{
+        margin: 10px;
+      }
+      nav{
+        overflow: hidden;
+        background-color:#333;
+      }
+      nav ul{
+        list-style-type: none;
+        margin:0;
+        padding:0;
+        background-color: black;
+      }
+      nav ul li{
+        background-color:#333;
+        float:left;
+      }
+      nav a{
+        display:block;
+        color:white;
+        text-decoration: none;
+        text-align: center;
+        padding:14px 16px;
+      }
+      nav a:hover{
+        background-color: #ccc;
+        color:black;
+
+      }
+      .column{
+        float:left;
+        padding:10px;
+      }
+      .side{
+        width:40%;
+      }
+      .middle{
+        width:60%;
+        padding:10px; 
+      }
+
+      #success_message{ display: none;}
+
+      #calendar {
+  			margin: 0 auto 0 14px;
+  		}
+
+  		button {
+  			border: 0;
+  			outline: 0;
+  		}
+
+  		#scheduleButton {
+  			background:#2caa22;
+  			cursor: pointer;
+  		}
+  		#scheduleButton:hover {
+  			background: rgba(44, 186, 34, 0.2);
+  		}
+  		#scheduleButton:hover .scheduleButton {
+  			background: none;
+  			color:#2caa22;
+  		}
+  		.fc-day-number {
+  			color: #7c8a95;
+  		}
+  		.fc-sun, .fc-sun a {
+  			color: #BA392F;
+  		}
+  		.fc-sun a:hover {
+  			color: #7F2720;
+  			text-decoration: none;
+  		}
+  		.fc-sat, .fc-sat a {
+  			color: #4354BA;
+  		}
+  		.fc-sat a:hover {
+  			color: #2E3A7F;
+  			text-decoration: none;
+  		}
+  		.fc-widget-content {
+  			cursor:context-menu;
+  		}
+  		.inputStyle{
+  			background-color: LightGray;
+  		}
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <nav>
+        <ul>
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+          <li><a href="#">Link</a></li>
+        </ul>
+      </nav>
+      <div class="box wrapper">
+        <h2>Register Overnight</h2>
+        <p>It is time for all citizens to be <b>careful<b/> in Corona. If you really feel like you need to stay out, please write down the reasons for your application.</p>
+        <h/>
+        <p>If the manager sees the reason and permits it, it will be approved for the overnight, and if it is not approved, it will not be approved for the overnight.</p>
+        <h/>
+        <div class="containers">
+          <div class="column side" >
+
+                          		<div class="container form-group schedule">
+                          			<form id="forms">
+                          				<div class="schedule">
+                          					<h1 style="display:inline">registration table</h1>
+                          				</div>
+                          				<hr class="scheduleLine"/>
+                          				<div class="schedule">
+                          					<input id="title" type="text" rows="2" class="form-control textInput" placeholder="Name">
+                          				</div>
+                          				<hr/>
+                          				<div class="schedule">
+                          					<div class="inline schedule">
+                          						<label>FROM</label>
+                          						<!-- submit button 클릭후 전단되는 value 형식 YYYY-MM-DDTHH:MM -->
+                                      <input type="date" class="timeInput" id="datepicker">
+                                      <label>TO</label>
+                          						<input type="date" class="timeInput" id="datepicker2">
+                          					</div>
+                          				</div>
+                          				<div class="schedule">
+                          					<label>RC:</label>
+                          					<div class="inline schedule" id="repeat">
+                          						<label class="radio-inline"><input type="radio" name="optradio" value="Y">Select your College</label>
+                          						<label class="radio-inline"><input type="radio" name="optradio" value="M">Torrey</label>
+                          						<label class="radio-inline"><input type="radio" name="optradio" value="W">손양원</label>
+                          						<label class="radio-inline"><input type="radio" name="optradio" value="D">Kuyper</label>
+                                      <label class="radio-inline"><input type="radio" name="optradio" value="M">열송</label>
+                                      <label class="radio-inline"><input type="radio" name="optradio" value="W">장기려</label>
+                                      <label class="radio-inline"><input type="radio" name="optradio" value="D">Carmichael</label>
+                          					</div>
+                          				</div>
+                                  <div class="schedule">
+                          					<label>Building:</label>
+                                    <select name="department" class="form-control selectpicker">
+                                      <option value="">Select your Department</option>
+                                      <option>비전관</option>
+                                      <option>하용조관</option>
+                                      <option >은혜관</option>
+                                      <option >국제관</option>
+                                      <option >벧엘관</option>
+                                      <option >로뎀관</option>
+                                      <option >창조관</option>
+                                      <option >갈대상자관</option>
+                                    </select>
+                          				</div>
+                          				<div class="schedule">
+                          					<div class="schedule">
+                          						<label>Locate:</label>
+                          						<input id="place" type="text" class="form-control textInput" placeholder="position input">
+                          					</div>
+                          					<label>Reason:</label>
+                          					<textarea id="desc" class="form-control textInput" rows="5" placeholder="Explain the reason for the overnight"></textarea>
+                          				</div>
+                          				<div class="schedule">
+                          					<button id="submit" type="submit" class="fc-button fc-state-default">Register</button>
+                          					<button id="cancel" type="button" class="fc-button fc-state-default">Cancel</button>
+                          				</div>
+                          			</form>
+                              </div>
+                              
+          </div>
+
+          <div class="column middle">
+                <!--Calendar-->
+                <div id="calendar" class="fc fc-unthemed fc-ltr">
+                  <div class="fc-toolbar fc-header-toolbar">
+                    <div class="fc-left">
+                      <div class="fc-button-group">
+                        <button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left"><span class="fc-icon fc-icon-left-single-arrow"></span></button>
+                        <button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right"><span class="fc-icon fc-icon-right-single-arrow"></span></button>
+                      </div>
+                      <button type="button" class="fc-today-button fc-button fc-state-default fc-corner-left fc-corner-right">today</button>
+                    </div>
+                    <div class="fc-center">
+                      <h2></h2></div>
+                    <div class="fc-clear"></div>
+                  </div>
+                  <div class="fc-view-container">
+                    <div class="fc-view fc-month-view fc-basic-view">
+                      <table>
+                        <thead class="fc-head">
+                          <tr>
+                            <td class="fc-head-container fc-widget-header">
+                              <div class="fc-row fc-widget-header">
+                                <table>
+                                  <thead>
+                                    <tr>
+                                      <th class="fc-day-header fc-widget-header fc-sun"><span>Sun</span></th>
+                                      <th class="fc-day-header fc-widget-header fc-mon"><span>Mon</span></th>
+                                      <th class="fc-day-header fc-widget-header fc-tue"><span>Tue</span></th>
+                                      <th class="fc-day-header fc-widget-header fc-wed"><span>Wed</span></th>
+                                      <th class="fc-day-header fc-widget-header fc-thu"><span>Thu</span></th>
+                                      <th class="fc-day-header fc-widget-header fc-fri"><span>Fri</span></th>
+                                      <th class="fc-day-header fc-widget-header fc-sat"><span>Sat</span></th>
+                                    </tr>
+                                  </thead>
+                                </table>
+                              </div>
+                            </td>
+                          </tr>
+                        </thead>
+                        <tbody class="fc-body">
+                          <tr>
+                            <td class="fc-widget-content">
+                              <div class="fc-scroller fc-day-grid-container" style="overflow: hidden; height: 200px;">
+                                <div class="fc-day-grid fc-unselectable">
+                                  <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 107px;">
+                                    <div class="fc-bg">
+                                      <table>
+                                        <tbody>
+                                          <tr>
+                                            <td class="fc-day fc-widget-content fc-sun"></td>
+                                            <td class="fc-day fc-widget-content fc-mon"></td>
+                                            <td class="fc-day fc-widget-content fc-tue"></td>
+                                            <td class="fc-day fc-widget-content fc-wed"></td>
+                                            <td class="fc-day fc-widget-content fc-thu"></td>
+                                            <td class="fc-day fc-widget-content fc-fri"></td>
+                                            <td class="fc-day fc-widget-content fc-sat"></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="fc-content-skeleton">
+                                      <table>
+                                        <thead>
+                                          <tr>
+                                            <td class="fc-day-top fc-sun">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-mon">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-tue">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-wed">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-thu">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-fri">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-sat">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 107px;">
+                                    <div class="fc-bg">
+                                      <table>
+                                        <tbody>
+                                          <tr>
+                                            <td class="fc-day fc-widget-content fc-sun"></td>
+                                            <td class="fc-day fc-widget-content fc-mon"></td>
+                                            <td class="fc-day fc-widget-content fc-tue"></td>
+                                            <td class="fc-day fc-widget-content fc-wed"></td>
+                                            <td class="fc-day fc-widget-content fc-thu"></td>
+                                            <td class="fc-day fc-widget-content fc-fri"></td>
+                                            <td class="fc-day fc-widget-content fc-sat"></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="fc-content-skeleton">
+                                      <table>
+                                        <thead>
+                                          <tr>
+                                            <td class="fc-day-top fc-sun">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-mon">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-tue">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-wed">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-thu">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-fri">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-sat">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 107px;">
+                                    <div class="fc-bg">
+                                      <table>
+                                        <tbody>
+                                          <tr>
+                                            <td class="fc-day fc-widget-content fc-sun"></td>
+                                            <td class="fc-day fc-widget-content fc-mon"></td>
+                                            <td class="fc-day fc-widget-content fc-tue"></td>
+                                            <td class="fc-day fc-widget-content fc-wed"></td>
+                                            <td class="fc-day fc-widget-content fc-thu"></td>
+                                            <td class="fc-day fc-widget-content fc-fri"></td>
+                                            <td class="fc-day fc-widget-content fc-sat"></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="fc-content-skeleton">
+                                      <table>
+                                        <thead>
+                                          <tr>
+                                            <td class="fc-day-top fc-sun">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-mon">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-tue">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-wed">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-thu">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-fri">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-sat">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 107px;">
+                                    <div class="fc-bg">
+                                      <table>
+                                        <tbody>
+                                          <tr>
+                                            <td class="fc-day fc-widget-content fc-sun"></td>
+                                            <td class="fc-day fc-widget-content fc-mon"></td>
+                                            <td class="fc-day fc-widget-content fc-tue"></td>
+                                            <td class="fc-day fc-widget-content fc-wed"></td>
+                                            <td class="fc-day fc-widget-content fc-thu"></td>
+                                            <td class="fc-day fc-widget-content fc-fri"></td>
+                                            <td class="fc-day fc-widget-content fc-sat"></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="fc-content-skeleton">
+                                      <table>
+                                        <thead>
+                                          <tr>
+                                            <td class="fc-day-top fc-sun">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-mon">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-tue">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-wed">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-thu">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-fri">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-sat">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 107px;">
+                                    <div class="fc-bg">
+                                      <table>
+                                        <tbody>
+                                          <tr>
+                                            <td class="fc-day fc-widget-content fc-sun"></td>
+                                            <td class="fc-day fc-widget-content fc-mon"></td>
+                                            <td class="fc-day fc-widget-content fc-tue"></td>
+                                            <td class="fc-day fc-widget-content fc-wed"></td>
+                                            <td class="fc-day fc-widget-content fc-thu"></td>
+                                            <td class="fc-day fc-widget-content fc-fri"></td>
+                                            <td class="fc-day fc-widget-content fc-sat"></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="fc-content-skeleton">
+                                      <table>
+                                        <thead>
+                                          <tr>
+                                            <td class="fc-day-top fc-sun">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-mon">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-tue">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-wed">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-thu">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-fri">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-sat">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                  <div class="fc-row fc-week fc-widget-content fc-rigid" style="height: 112px;">
+                                    <div class="fc-bg">
+                                      <table>
+                                        <tbody>
+                                          <tr>
+                                            <td class="fc-day fc-widget-content fc-sun"></td>
+                                            <td class="fc-day fc-widget-content fc-mon"></td>
+                                            <td class="fc-day fc-widget-content fc-tue"></td>
+                                            <td class="fc-day fc-widget-content fc-wed"></td>
+                                            <td class="fc-day fc-widget-content fc-thu"></td>
+                                            <td class="fc-day fc-widget-content fc-fri"></td>
+                                            <td class="fc-day fc-widget-content fc-sat"></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                    <div class="fc-content-skeleton">
+                                      <table>
+                                        <thead>
+                                          <tr>
+                                            <td class="fc-day-top fc-sun">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-mon">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-tue">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-wed">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-thu">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-fri">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                            <td class="fc-day-top fc-sat">
+                                              <a class="fc-day-number"></a>
+                                            </td>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+          </div>
+
+        </div><!-- /.container -->
+      </div>
+    </div>
+
+
+    <script>
+      $("#submit").click(function(){
+
+        alert('update successfully');
+      });
+    </script>
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="/__/firebase/7.14.4/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+        https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="/__/firebase/7.14.4/firebase-analytics.js"></script>
+
+    <!-- Initialize Firebase -->
+    <script src="/__/firebase/init.js"></script>
+  </body>
+</html>
